@@ -13,18 +13,33 @@ class TaskController extends Controller
 
     public function task_list()
     {
-        $tasks = Task::orderBy("id", "asc")->paginate(10);
+        $tasks = Task::orderBy("id", "asc")->get();
         return view("task_list", compact("tasks"));
     }
     public function add_task(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                "task_name" => "required|string|max:50|unique:tasks,task_name",
+                'task_name' => [
+                    'required',
+                    'string',
+                    'max:50',
+                    'min:4',
+                    'unique:tasks,task_name',
+                    function ($attribute, $value, $fail) {
+                        if (preg_match('/^\d+$/', $value)) {
+                            $fail('Task name cannot contain numbers only.');
+                        }
+                        if(preg_match('/[^a-zA-Z0-9\s]/', $value)) {
+                            $fail('Task name cannot contain special Characters.');
+                        }
+                    },
+                ],
             ], [
                 "task_name.required" => "Task name is required.",
                 "task_name.string" => "Task name must be a string.",
                 "task_name.max" => "Task name must not be greater than 255 characters.",
+                "task_name.min" => "Task name must be atleast 3 characters long.",
                 "task_name.unique" => "Task already exist.",
             ]);
             if ($validator->fails()) {

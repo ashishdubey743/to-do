@@ -35,6 +35,30 @@
             margin-left: 0.5rem;
             /* Add some space between input container and button */
         }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination>.page-item>.page-link {
+            color: #6c757d;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination>.page-item>.page-link:hover {
+            color: #007bff;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .pagination>.page-item.active>.page-link {
+            z-index: 3;
+            color: #ffffff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
     </style>
 </head>
 
@@ -77,7 +101,8 @@
                         <td>{{ $task->task_status }}</td>
                         <td>
                             @if ($task->task_status !== 'Done')
-                                <button class="btn btn-success btn-sm" onclick="completeTask(this, {{ $task->id }})"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn btn-success btn-sm" onclick="completeTask(this, {{ $task->id }})"><i
+                                        class="fa-solid fa-check"></i></button>
                             @endif
 
                             <button class="btn btn-danger btn-sm" onclick="openModal(this, {{ $task->id }})"
